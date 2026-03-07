@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RodolicoHub | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; display: none; } /* Nascondiamo il body finché non siamo certi del login */
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <nav class="sticky top-0 z-50 px-6 py-4 glass border-b border-white/20">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-lg rotate-3 italic font-black">R</div>
+                <span class="text-xl font-extrabold tracking-tight">RODOLICO<span class="text-indigo-600">HUB</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="userDisplay" class="text-sm font-bold text-slate-600"></span>
+                <button onclick="handleLogout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-red-100 transition">
+                    Esci
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <header class="mb-10">
+            <h1 class="text-4xl font-extrabold tracking-tighter">Bentornato nel <span class="text-indigo-600">Futuro.</span></h1>
+            <p class="text-slate-500">Gestisci le tue attività e resta aggiornato sulle novità del liceo.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-md transition">
+                <div class="text-3xl mb-4">📢</div>
+                <h3 class="font-bold text-xl mb-2">Bacheca</h3>
+                <p class="text-sm text-slate-500 mb-6">Leggi gli ultimi avvisi ufficiali dei rappresentanti.</p>
+                <button class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-sm">Apri</button>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-md transition">
+                <div class="text-3xl mb-4">💡</div>
+                <h3 class="font-bold text-xl mb-2">Proposte</h3>
+                <p class="text-sm text-slate-500 mb-6">Invia una nuova idea per migliorare la nostra scuola.</p>
+                <button class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-sm">Invia</button>
+            </div>
+
+            <div id="adminPanel" class="hidden bg-indigo-600 p-6 rounded-[2rem] shadow-lg text-white">
+                <div class="text-3xl mb-4">🛡️</div>
+                <h3 class="font-bold text-xl mb-2">Pannello Admin</h3>
+                <p class="text-sm text-indigo-100 mb-6">Area riservata ai rappresentanti per gestire il portale.</p>
+                <button class="w-full py-3 bg-white text-indigo-600 rounded-xl font-bold text-sm">Gestisci</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsW9T36UH47Cy2hLVFC9m2wZxE_S22k4M",
+            authDomain: "rodolicohub.firebaseapp.com",
+            projectId: "rodolicohub",
+            storageBucket: "rodolicohub.firebasestorage.app",
+            messagingSenderId: "1066843178658",
+            appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // CONTROLLO ACCESSO REAL-TIME
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // L'utente è loggato correttamente
+                document.body.style.display = "block";
+                document.getElementById('userDisplay').innerText = user.email;
+
+                // Controllo ruolo (dal localStorage impostato al login)
+                const role = localStorage.getItem('userRole');
+                if (role === 'admin') {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                }
+            } else {
+                // Utente non loggato: caccia via!
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Funzione Logout
+        window.handleLogout = async () => {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('userRole');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error("Errore durante il logout:", error);
+            }
+        };
+    </script>
+</body>
+</html>
