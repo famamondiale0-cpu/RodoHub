@@ -5,28 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RodolicoHub | Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
 
-    <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100 w-full max-w-md">
-        <h2 class="text-3xl font-extrabold text-center mb-6">Rodolico<span class="text-indigo-600">Hub</span></h2>
+    <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md border border-slate-200">
+        <div class="text-center mb-8">
+            <div class="inline-block bg-indigo-600 text-white p-3 rounded-2xl rotate-3 shadow-lg mb-4 font-black text-2xl">R</div>
+            <h1 class="text-3xl font-black tracking-tighter">RODOLICO<span class="text-indigo-600">HUB</span></h1>
+            <p class="text-slate-500 text-sm mt-2">Accedi al portale degli studenti</p>
+        </div>
         
         <div class="space-y-4">
-            <select id="roleSelect" onchange="checkRole()" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-bold outline-none">
-                <option value="studente">Sono uno Studente</option>
-                <option value="rappresentante">Sono un Rappresentante</option>
-            </select>
-
-            <input type="email" id="userEmail" placeholder="Email @rodolico.it" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none">
-            
-            <div id="adminCodeBox" class="hidden">
-                <input type="password" id="adminCode" placeholder="Codice Segreto" class="w-full p-3 rounded-xl bg-amber-50 border border-amber-200">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-1">Chi sei?</label>
+                <select id="roleSelect" onchange="checkRole()" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 font-bold outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                    <option value="studente">Studente</option>
+                    <option value="rappresentante">Rappresentante</option>
+                </select>
             </div>
 
-            <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95">
-                ENTRA ORA
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-1">Email Istituzionale</label>
+                <input type="email" id="userEmail" placeholder="nome.cognome@rodolico.it" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            </div>
+            
+            <div id="adminCodeBox" class="hidden">
+                <label class="block text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 ml-1">Codice Accesso</label>
+                <input type="password" id="adminCode" placeholder="Inserisci il codice" class="w-full p-4 rounded-2xl bg-amber-50 border border-amber-200 outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+
+            <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95 text-lg uppercase tracking-tighter">
+                Entra nel portale
             </button>
         </div>
+        
+        <p class="text-center text-[10px] text-slate-300 mt-8 uppercase tracking-[0.3em]">v1.0.2 Stable Release</p>
     </div>
 
     <script type="module">
@@ -60,33 +76,33 @@
             const password = "password_automatica_123";
 
             if (!email.includes('@')) return alert("Inserisci una mail valida!");
-            if (role === 'rappresentante' && code !== '12345') return alert("Codice errato!");
+            if (role === 'rappresentante' && code !== '12345') return alert("Codice rappresentante errato!");
 
             btn.disabled = true;
-            btn.innerText = "CONNESSIONE...";
+            btn.innerText = "ACCESSO IN CORSO...";
 
             try {
-                // Prova il login
                 await signInWithEmailAndPassword(auth, email, password);
                 localStorage.setItem('userRole', role === 'rappresentante' ? 'admin' : 'studente');
+                alert("Login effettuato! Benvenuto.");
                 window.location.href = 'dashboard.html';
             } catch (err) {
-                // Se l'utente non esiste (errore comune al primo accesso), lo creiamo
                 if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials') {
                     try {
                         const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                        await setDoc(doc(db, "utenti", userCred.user.uid), { email, role });
+                        await setDoc(doc(db, "utenti", userCred.user.uid), { email, role, createdAt: new Date() });
                         localStorage.setItem('userRole', role === 'rappresentante' ? 'admin' : 'studente');
+                        alert("Account creato con successo! Benvenuto.");
                         window.location.href = 'dashboard.html';
                     } catch (e) { 
-                        alert("Errore: " + e.message); 
+                        alert("Errore creazione: " + e.message); 
                         btn.disabled = false;
-                        btn.innerText = "ENTRA ORA";
+                        btn.innerText = "Entra nel portale";
                     }
                 } else {
-                    alert("Errore Firebase: " + err.message);
+                    alert("Errore tecnico: " + err.message);
                     btn.disabled = false;
-                    btn.innerText = "ENTRA ORA";
+                    btn.innerText = "Entra nel portale";
                 }
             }
         };
