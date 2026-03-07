@@ -8,24 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .accordion-content { transition: all 0.3s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
-        .accordion-content.open { max-height: 300px; opacity: 1; padding-bottom: 1.25rem; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob { animation: blob 7s infinite; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-
-    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden opacity-40">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-        <div class="absolute top-0 -right-24 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob" style="animation-delay: 2s;"></div>
-    </div>
 
     <nav class="sticky top-0 z-50 px-6 py-4 glass border-b border-white/20">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -36,74 +22,41 @@
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        <section class="lg:col-span-8 space-y-8">
-            <div class="space-y-4">
-                <h2 class="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900 leading-[1.1]">
-                    La scuola, <br><span class="text-indigo-600 underline decoration-indigo-200 italic">nelle tue mani.</span>
-                </h2>
-                <p class="text-lg text-slate-600 max-w-xl">Accedi al portale digitale del Liceo Rodolico per partecipare e restare informato.</p>
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <section class="max-w-md mx-auto space-y-8">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-extrabold tracking-tighter text-slate-900">Accedi a <span class="text-indigo-600">RodoHub</span></h2>
             </div>
 
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
-                <div class="grid md:grid-cols-2 gap-10 items-center">
-                    <div class="space-y-4">
-                        <h3 class="text-xl font-bold">Accedi al Portale</h3>
-                        <select id="roleSelect" onchange="checkRole()" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-bold text-sm outline-none transition focus:ring-2 focus:ring-indigo-500">
-                            <option value="studente">Sono uno Studente</option>
-                            <option value="rappresentante">Sono un Rappresentante</option>
-                        </select>
-                        <input type="email" id="userEmail" placeholder="Email istituzionale" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition">
-                        <div id="adminCodeBox" class="hidden">
-                            <input type="password" id="adminCode" placeholder="Codice Segreto" class="w-full p-3 rounded-xl bg-amber-50 border border-amber-200 font-mono">
-                        </div>
-                        <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95">
-                            ENTRA ORA
-                        </button>
+            <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
+                <div class="space-y-4">
+                    <select id="roleSelect" onchange="checkRole()" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-bold outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="studente">Studente</option>
+                        <option value="rappresentante">Rappresentante</option>
+                    </select>
+
+                    <input type="email" id="userEmail" placeholder="Email @rodolico.it" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+                    
+                    <div id="adminCodeBox" class="hidden">
+                        <input type="password" id="adminCode" placeholder="Codice Segreto" class="w-full p-3 rounded-xl bg-amber-50 border border-amber-200">
                     </div>
-                    <div class="text-center md:pl-10 border-t md:border-t-0 md:border-l border-slate-100 pt-6 md:pt-0">
-                        <p class="text-slate-500 mb-4 text-sm font-semibold">Stato Sistema</p>
-                        <div class="flex items-center justify-center gap-2 text-green-500 font-bold text-xs uppercase">
-                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online
-                        </div>
-                    </div>
+
+                    <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95">
+                        ENTRA ORA
+                    </button>
                 </div>
             </div>
         </section>
-
-        <aside class="lg:col-span-4 space-y-4">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <button onclick="toggleAcc(1)" class="w-full p-5 text-left flex justify-between items-center font-bold">
-                    <span>👥 Chi Siamo</span><span id="arr1">→</span>
-                </button>
-                <div id="acc1" class="accordion-content px-5 text-slate-600 text-sm">Siamo studenti del Rodolico che vogliono modernizzare la comunicazione scolastica.</div>
-            </div>
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <button onclick="toggleAcc(2)" class="w-full p-5 text-left flex justify-between items-center font-bold">
-                    <span>🎯 La nostra Mission</span><span id="arr2">→</span>
-                </button>
-                <div id="acc2" class="accordion-content px-5 text-slate-600 text-sm">Centralizzare le info e dare voce a ogni studente in modo trasparente.</div>
-            </div>
-            <div class="bg-indigo-900 rounded-2xl text-white shadow-lg overflow-hidden">
-                <button onclick="toggleAcc(3)" class="w-full p-5 text-left flex justify-between items-center font-bold">
-                    <span>🚀 Evoluzione Futura</span><span id="arr3">→</span>
-                </button>
-                <div id="acc3" class="accordion-content px-5 text-indigo-100 text-sm">Prossimamente: Forum, Mercatino libri e gestione eventi.</div>
-            </div>
-        </aside>
     </main>
-
-    <footer class="py-8 text-center text-slate-400 text-[10px] uppercase tracking-[0.2em] font-bold">
-        v1 sitorodohub
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIGURAZIONE CON LA TUA NUOVA CHIAVE
         const firebaseConfig = {
-            apiKey: "AIzaSyAsW9T36UH47Cy2hLVFC9m2wZxE_S22k4M",
+            apiKey: "AIzaSyDWr43om-WIK_nS1FCUXOj9X0goQgYSNvM",
             authDomain: "rodolicohub.firebaseapp.com",
             projectId: "rodolicohub",
             storageBucket: "rodolicohub.firebasestorage.app",
@@ -115,12 +68,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        window.toggleAcc = (id) => {
-            const content = document.getElementById('acc' + id);
-            content.classList.toggle('open');
-            document.getElementById('arr' + id).style.transform = content.classList.contains('open') ? 'rotate(90deg)' : 'rotate(0deg)';
-        };
-
         window.checkRole = () => {
             const role = document.getElementById('roleSelect').value;
             document.getElementById('adminCodeBox').classList.toggle('hidden', role !== 'rappresentante');
@@ -131,27 +78,35 @@
             const role = document.getElementById('roleSelect').value;
             const code = document.getElementById('adminCode').value;
             const btn = document.getElementById('loginBtn');
-            const password = "password_base_rodolico";
+            const password = "password_base_123";
 
-            if (!email.includes('@')) return alert("Email non valida!");
+            if (!email.includes('@')) return alert("Usa una mail valida!");
             if (role === 'rappresentante' && code !== '12345') return alert("Codice errato!");
 
             btn.disabled = true;
-            btn.innerText = "ACCESSO...";
+            btn.innerText = "CONNESSIONE...";
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
                 localStorage.setItem('userRole', role === 'rappresentante' ? 'admin' : 'studente');
                 window.location.href = 'dashboard.html';
             } catch (err) {
-                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials') {
                     try {
-                        const user = await createUserWithEmailAndPassword(auth, email, password);
-                        await setDoc(doc(db, "utenti", user.user.uid), { email, role });
+                        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                        await setDoc(doc(db, "utenti", userCred.user.uid), { email, role });
                         localStorage.setItem('userRole', role === 'rappresentante' ? 'admin' : 'studente');
                         window.location.href = 'dashboard.html';
-                    } catch (e) { alert(e.message); btn.disabled = false; }
-                } else { alert(err.message); btn.disabled = false; }
+                    } catch (e) { 
+                        alert("Errore Firebase: " + e.message); 
+                        btn.disabled = false;
+                        btn.innerText = "ENTRA ORA";
+                    }
+                } else {
+                    alert("Errore: " + err.message);
+                    btn.disabled = false;
+                    btn.innerText = "ENTRA ORA";
+                }
             }
         };
     </script>
