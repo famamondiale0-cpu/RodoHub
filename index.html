@@ -3,61 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RodolicoHub | Digital Hub</title>
+    <title>RodolicoHub | Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
 
-    <nav class="p-6 glass border-b border-slate-200">
-        <div class="max-w-7xl mx-auto flex items-center gap-3">
-            <div class="bg-indigo-600 text-white p-2 rounded-lg font-black shadow-lg">R</div>
-            <span class="text-xl font-extrabold">RODOLICO<span class="text-indigo-600">HUB</span></span>
-        </div>
-    </nav>
+    <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 w-full max-w-md">
+        <h2 class="text-3xl font-extrabold text-center mb-6">Rodolico<span class="text-indigo-600">Hub</span></h2>
+        
+        <div class="space-y-4">
+            <select id="roleSelect" onchange="checkRole()" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-bold outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="studente">Studente</option>
+                <option value="rappresentante">Rappresentante</option>
+            </select>
 
-    <main class="flex-grow flex items-center justify-center px-6 py-12">
-        <div class="w-full max-w-md space-y-8">
-            <div class="text-center">
-                <h2 class="text-4xl font-extrabold tracking-tight">Bentornato!</h2>
-                <p class="text-slate-500 mt-2">Accedi per continuare sul portale digitale.</p>
+            <input type="email" id="userEmail" placeholder="Email istituzionale" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 outline-none">
+            
+            <div id="adminCodeBox" class="hidden">
+                <input type="password" id="adminCode" placeholder="Codice Segreto" class="w-full p-3 rounded-xl bg-amber-50 border border-amber-200">
             </div>
 
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2 ml-1">Ruolo</label>
-                    <select id="roleSelect" onchange="checkRole()" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 font-bold outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                        <option value="studente">Studente</option>
-                        <option value="rappresentante">Rappresentante</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold mb-2 ml-1">Email Istituzionale</label>
-                    <input type="email" id="userEmail" placeholder="nome.cognome@rodolico.it" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                </div>
-                
-                <div id="adminCodeBox" class="hidden">
-                    <label class="block text-sm font-bold mb-2 ml-1 text-amber-600">Codice Rappresentante</label>
-                    <input type="password" id="adminCode" placeholder="Codice segreto" class="w-full p-4 rounded-2xl bg-amber-50 border border-amber-200 outline-none focus:ring-2 focus:ring-amber-500 transition-all">
-                </div>
-
-                <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95 uppercase tracking-tighter">
-                    ENTRA ORA
-                </button>
-            </div>
+            <button id="loginBtn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition active:scale-95">
+                ENTRA ORA
+            </button>
         </div>
-    </main>
+    </div>
 
-    <footer class="p-8 text-center text-slate-400 text-[10px] tracking-[0.5em] uppercase">
-        RodolicoHub Digital Services
-    </footer>
-
-    <script type="module" src="auth.js"></script>
+    <script type="module" src="auth.js" onerror="alert('Errore fatale: Impossibile caricare auth.js. Verifica il nome del file su GitHub!')"></script>
 
 </body>
 </html>
