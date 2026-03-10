@@ -7,21 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; display: none; } /* Nascondiamo il body finché non siamo certi del login */
+        body { font-family: 'Plus Jakarta Sans', sans-serif; display: none; } 
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
 
-    <nav class="sticky top-0 z-50 px-6 py-4 glass border-b border-white/20">
+    <nav class="sticky top-0 z-50 px-6 py-4 glass border-b border-slate-200/50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-lg rotate-3 italic font-black">R</div>
+                <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-lg rotate-3 italic font-black text-sm">R</div>
                 <span class="text-xl font-extrabold tracking-tight">RODOLICO<span class="text-indigo-600">HUB</span></span>
             </div>
             <div class="flex items-center gap-4">
-                <span id="userDisplay" class="text-sm font-bold text-slate-600"></span>
-                <button onclick="handleLogout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-red-100 transition">
+                <span id="userDisplay" class="text-sm font-bold text-slate-600 hidden md:inline"></span>
+                <button onclick="handleLogout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-red-600 hover:text-white transition-all">
                     Esci
                 </button>
             </div>
@@ -29,85 +29,83 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 py-12">
-        <header class="mb-10">
+        <header class="mb-10 text-center md:text-left">
             <h1 class="text-4xl font-extrabold tracking-tighter">Bentornato nel <span class="text-indigo-600">Futuro.</span></h1>
-            <p class="text-slate-500">Gestisci le tue attività e resta aggiornato sulle novità del liceo.</p>
+            <p class="text-slate-500 mt-2">Gestisci le tue attività e resta aggiornato sulle novità del liceo.</p>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-md transition">
-                <div class="text-3xl mb-4">📢</div>
+            
+            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📢</div>
                 <h3 class="font-bold text-xl mb-2">Bacheca</h3>
-                <p class="text-sm text-slate-500 mb-6">Leggi gli ultimi avvisi ufficiali dei rappresentanti.</p>
-                <button class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-sm">Apri</button>
+                <p class="text-sm text-slate-500 mb-6 leading-relaxed">Leggi gli ultimi avvisi ufficiali pubblicati dai rappresentanti d'istituto.</p>
+                <button onclick="window.location.href='bacheca.html'" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-indigo-600 transition-colors shadow-lg shadow-slate-200">
+                    Apri Bacheca
+                </button>
             </div>
 
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-md transition">
-                <div class="text-3xl mb-4">💡</div>
-                <h3 class="font-bold text-xl mb-2">Proposte</h3>
-                <p class="text-sm text-slate-500 mb-6">Invia una nuova idea per migliorare la nostra scuola.</p>
-                <button class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-sm">Invia</button>
+            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">💡</div>
+                <h3 class="font-bold text-xl mb-2">Idee & Proposte</h3>
+                <p class="text-sm text-slate-500 mb-6 leading-relaxed">Hai un'idea per la scuola? Inviala e falla votare dai tuoi compagni.</p>
+                <button onclick="window.location.href='idee.html'" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-indigo-600 transition-colors shadow-lg shadow-slate-200">
+                    Invia Idea
+                </button>
             </div>
 
-            <div id="adminPanel" class="hidden bg-indigo-600 p-6 rounded-[2rem] shadow-lg text-white">
-                <div class="text-3xl mb-4">🛡️</div>
-                <h3 class="font-bold text-xl mb-2">Pannello Admin</h3>
-                <p class="text-sm text-indigo-100 mb-6">Area riservata ai rappresentanti per gestire il portale.</p>
-                <button class="w-full py-3 bg-white text-indigo-600 rounded-xl font-bold text-sm">Gestisci</button>
+            <div id="adminPanel" class="hidden bg-indigo-600 p-6 rounded-[2.5rem] shadow-xl text-white transform hover:scale-[1.02] transition-all">
+                <div class="text-4xl mb-4">🛡️</div>
+                <h3 class="font-bold text-xl mb-2 italic text-indigo-100 uppercase tracking-tighter">Area Rappresentanti</h3>
+                <p class="text-sm text-indigo-100 mb-6 leading-relaxed">Pubblica nuovi avvisi in bacheca e gestisci le proposte degli studenti.</p>
+                <button onclick="window.location.href='admin.html'" class="w-full py-4 bg-white text-indigo-600 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-indigo-900/20">
+                    Gestisci Portale
+                </button>
             </div>
+
         </div>
     </main>
 
     <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // Configurazione Certificata
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWr43om-WIK_nS1FCUXOj9X0goQgYSNvM",
+            authDomain: "rodolicohub.firebaseapp.com",
+            projectId: "rodolicohub",
+            storageBucket: "rodolicohub.firebasestorage.app",
+            messagingSenderId: "1066843178658",
+            appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
+        };
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDWr43om-WIK_nS1FCUXOj9X0goQgYSNvM",
-    authDomain: "rodolicohub.firebaseapp.com",
-    projectId: "rodolicohub",
-    storageBucket: "rodolicohub.firebasestorage.app",
-    messagingSenderId: "1066843178658",
-    appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
-};
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
+        // Controllo Sessione
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.body.style.display = "block";
+                document.getElementById('userDisplay').innerText = user.email;
 
-const auth = getAuth(app);
+                // Controllo Ruolo Admin
+                const role = localStorage.getItem('userRole');
+                if (role === "admin") {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                }
+            } else {
+                // Se non è loggato, torna al login
+                window.location.href = "index.html";
+            }
+        });
 
-onAuthStateChanged(auth,(user)=>{
-
-    if(user){
-
-        document.body.style.display="block";
-
-        document.getElementById('userDisplay').innerText=user.email;
-
-        const role=localStorage.getItem('userRole');
-
-        if(role==="admin"){
-
-            document.getElementById('adminPanel').classList.remove('hidden');
-
-        }
-
-    }else{
-
-        window.location.href="index.html";
-
-    }
-
-});
-
-window.handleLogout=async()=>{
-
-    await signOut(auth);
-
-    localStorage.removeItem('userRole');
-
-    window.location.href="index.html";
-
-}
-
-</script>
+        // Funzione Logout
+        window.handleLogout = async () => {
+            await signOut(auth);
+            localStorage.removeItem('userRole');
+            window.location.href = "index.html";
+        };
+    </script>
+</body>
+</html>
