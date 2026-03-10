@@ -1,98 +1,85 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idee Studenti | Rodolico Connect</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
-</head>
-<body class="bg-slate-50 text-slate-900">
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <a href="dashboard.html" class="text-indigo-600 font-bold flex items-center gap-2">← Dashboard</a>
-            <h1 class="font-black tracking-tight">RODOLICO<span class="text-indigo-600">IDEAS</span></h1>
-        </div>
-    </nav>
+const firebaseConfig = {
+    apiKey: "AIzaSyDWr43om-WIK_nS1FCUXOj9X0goQgYSNvM",
+    authDomain: "rodolicohub.firebaseapp.com",
+    projectId: "rodolicohub",
+    storageBucket: "rodolicohub.firebasestorage.app",
+    messagingSenderId: "1066843178658",
+    appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
+};
 
-    <main class="max-w-3xl mx-auto px-6 py-10">
-        
-        <section class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-10">
-            <h2 class="text-xl font-bold mb-4">Cosa proponi oggi?</h2>
-            <textarea id="ideaInput" placeholder="Esempio: Vorrei più distributori d'acqua nei corridoi..." class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all h-24 mb-4"></textarea>
-            <button id="inviaBtn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-indigo-700 transition w-full md:w-auto">
-                Pubblica Idea
-            </button>
-        </section>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        <div id="listaIdee" class="space-y-6">
-            <div class="text-center py-10 text-slate-400">Caricamento proposte...</div>
-        </div>
-    </main>
+document.getElementById('inviaBtn').addEventListener('click', async () => {
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    const input = document.getElementById('ideaInput');
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsW9T36UH47Cy2hLVFC9m2wZxE_S22k4M",
-            authDomain: "rodolicohub.firebaseapp.com",
-            projectId: "rodolicohub",
-            storageBucket: "rodolicohub.firebasestorage.app",
-            messagingSenderId: "1066843178658",
-            appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
-        };
+    if (input.value.trim() !== "") {
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // --- 1. PUBBLICARE UN'IDEA ---
-        document.getElementById('inviaBtn').addEventListener('click', async () => {
-            const input = document.getElementById('ideaInput');
-            if (input.value.trim() !== "") {
-                await addDoc(collection(db, "idee"), {
-                    contenuto: input.value,
-                    voti: 0,
-                    data: new Date()
-                });
-                input.value = ""; // Svuota il campo
-            }
+        await addDoc(collection(db, "idee"), {
+            contenuto: input.value,
+            voti: 0,
+            data: new Date()
         });
 
-        // --- 2. LEGGERE LE IDEE IN TEMPO REALE ---
-        const q = query(collection(db, "idee"), orderBy("data", "desc"));
-        onSnapshot(q, (snapshot) => {
-            const container = document.getElementById('listaIdee');
-            container.innerHTML = ""; // Pulisce la lista prima di aggiornare
+        input.value = "";
 
-            snapshot.forEach((d) => {
-                const idea = d.data();
-                const card = document.createElement('div');
-                card.className = "bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center";
-                card.innerHTML = `
-                    <div class="flex-1">
-                        <p class="text-slate-800 font-medium">${idea.contenuto}</p>
-                        <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">${new Date(idea.data.seconds * 1000).toLocaleDateString()}</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <button onclick="window.vota('${d.id}', 1)" class="p-2 hover:bg-green-50 rounded-lg transition text-xl">👍</button>
-                        <span class="font-bold text-indigo-600">${idea.voti || 0}</span>
-                        <button onclick="window.vota('${d.id}', -1)" class="p-2 hover:bg-red-50 rounded-lg transition text-xl">👎</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        });
+    }
 
-        // --- 3. VOTARE ---
-        window.vota = async (id, valore) => {
-            const docRef = doc(db, "idee", id);
-            await updateDoc(docRef, {
-                voti: increment(valore)
-            });
-        };
-    </script>
-</body>
-</html>
+});
+
+const q = query(collection(db, "idee"), orderBy("data", "desc"));
+
+onSnapshot(q, (snapshot) => {
+
+    const container = document.getElementById('listaIdee');
+
+    container.innerHTML = "";
+
+    snapshot.forEach((d) => {
+
+        const idea = d.data();
+
+        const card = document.createElement('div');
+
+        card.className = "bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center";
+
+        card.innerHTML = `
+        <div class="flex-1">
+            <p class="text-slate-800 font-medium">${idea.contenuto}</p>
+            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">
+            ${new Date(idea.data.seconds * 1000).toLocaleDateString()}
+            </span>
+        </div>
+
+        <div class="flex items-center gap-4">
+
+            <button onclick="window.vota('${d.id}',1)" class="p-2 hover:bg-green-50 rounded-lg text-xl">👍</button>
+
+            <span class="font-bold text-indigo-600">${idea.voti || 0}</span>
+
+            <button onclick="window.vota('${d.id}',-1)" class="p-2 hover:bg-red-50 rounded-lg text-xl">👎</button>
+
+        </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+});
+
+window.vota = async (id,valore)=>{
+
+    const docRef = doc(db,"idee",id);
+
+    await updateDoc(docRef,{
+        voti: increment(valore)
+    });
+
+}
+</script>
