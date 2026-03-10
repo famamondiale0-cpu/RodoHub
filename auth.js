@@ -5,14 +5,13 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDWr43om-WIK_nS1FCUXOj9X0goQgYSNvM",
-    authDomain: "rodolicohub.firebaseapp.com",
-    projectId: "rodolicohub",
-    storageBucket: "rodolicohub.firebasestorage.app",
-    messagingSenderId: "1066843178658",
-    appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
+  apiKey: "AIzaSyAsW9T36UH47Cy2hLVfC9m2wZxE_S22k4M",
+  authDomain: "rodolicohub.firebaseapp.com",
+  projectId: "rodolicohub",
+  storageBucket: "rodolicohub.firebasestorage.app",
+  messagingSenderId: "1066843178658",
+  appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -53,3 +52,4 @@ window.checkRole = () => {
     const role = document.getElementById('roleSelect').value;
     document.getElementById('adminCodeBox').classList.toggle('hidden', role !== 'rappresentante');
 };
+
