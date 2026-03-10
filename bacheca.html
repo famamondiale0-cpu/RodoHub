@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bacheca Avvisi | Rodolico Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <nav class="bg-indigo-900 text-white px-6 py-4 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="dashboard.html" class="text-indigo-200 hover:text-white font-bold flex items-center gap-2 transition">← Torna alla Dash</a>
+            <h1 class="font-black tracking-tight italic">RODOLICO<span class="text-indigo-400">NEWS</span></h1>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10">
+        
+        <header class="mb-10 text-center">
+            <h2 class="text-3xl font-extrabold text-slate-900">Comunicazioni Ufficiali</h2>
+            <p class="text-slate-500">Tutto quello che devi sapere sulla vita d'istituto</p>
+        </header>
+
+        <div id="listaAvvisi" class="grid gap-8">
+            <div class="bg-white p-8 rounded-[2rem] border-l-8 border-indigo-600 shadow-sm">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-indigo-100 text-indigo-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Importante</span>
+                    <span class="text-slate-400 text-xs">Caricamento in corso...</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-900 italic">Benvenuti sulla nuova Bacheca!</h3>
+                <p class="text-slate-600 leading-relaxed">Qui troverete tutti gli aggiornamenti sulle attività dei rappresentanti e sulla scuola.</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Stesse chiavi di prima
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsW9T36UH47Cy2hLVFC9m2wZxE_S22k4M",
+            authDomain: "rodolicohub.firebaseapp.com",
+            projectId: "rodolicohub",
+            storageBucket: "rodolicohub.firebasestorage.app",
+            messagingSenderId: "1066843178658",
+            appId: "1:1066843178658:web:5c0d95f10eae4a7384b9fb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // LEGGERE AVVISI IN TEMPO REALE
+        const q = query(collection(db, "avvisi"), orderBy("data", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const container = document.getElementById('listaAvvisi');
+            container.innerHTML = ""; 
+
+            if (snapshot.empty) {
+                container.innerHTML = "<p class='text-center text-slate-400'>Nessun avviso presente al momento.</p>";
+            }
+
+            snapshot.forEach((d) => {
+                const avviso = d.data();
+                const dataFormattata = avviso.data ? new Date(avviso.data.seconds * 1000).toLocaleDateString() : "Oggi";
+                
+                const card = document.createElement('div');
+                card.className = "bg-white p-8 rounded-[2rem] border-l-8 border-indigo-600 shadow-sm hover:shadow-md transition";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">${avviso.tag || 'News'}</span>
+                        <span class="text-slate-400 text-xs">${dataFormattata}</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-900">${avviso.titolo}</h3>
+                    <p class="text-slate-600 leading-relaxed">${avviso.messaggio}</p>
+                `;
+                container.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>
